@@ -19,8 +19,6 @@
         ./modules/desktop/sddm.nix
         ./modules/services/networking.nix
         ./modules/services/sound.nix
-        ./modules/services/printing.nix
-        ./modules/services/context7.nix
         ./modules/packages/dev.nix
         ./modules/packages/system.nix
        ];
