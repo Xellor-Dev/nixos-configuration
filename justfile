@@ -21,7 +21,7 @@ help:
 # 🔨 Build configuration without switching (safe test)
 build:
     @echo "🔨 Building NixOS configuration..."
-    @sudo nixos-rebuild build --flake .#nixos |& nom
+    @nh os build .
     @echo "✅ Build successful! Use 'just switch' to apply."
 
 # 🚀 Build and apply configuration (with confirmation)
@@ -35,7 +35,7 @@ switch:
     @bash -c 'read -p "Continue? [y/N]: " REPLY; \
     if [ "$REPLY" = "y" ] || [ "$REPLY" = "Y" ]; then \
         echo "🚀 Switching to new configuration..."; \
-        sudo nixos-rebuild switch --flake .#nixos |& nom && echo "✅ System configuration updated!"; \
+        nh os switch . && echo "✅ System configuration updated!"; \
     else \
         echo "❌ Cancelled."; \
         exit 1; \
@@ -44,7 +44,7 @@ switch:
 # 🧪 Test configuration (build only, no sudo required)
 test:
     @echo "🧪 Testing configuration (no system changes)..."
-    @nixos-rebuild build --flake .#nixos 2>&1 | head -50 && \
+    @nh os build . && \
     echo "✅ Configuration is valid!"
 
 # 📦 Update flake.lock and show changes
@@ -128,11 +128,11 @@ dev:
 # ⏮️  Rollback to previous generation
 rollback:
     @echo "⏮️  Rolling back to previous generation..."
-    @sudo nix-env --list-generations -p /nix/var/nix/profiles/system | tail -5
+    @nh os info | tail -5
     @echo ""
     @read -p "Confirm rollback? [y/N]: " REPLY; \
     if [ "$${REPLY,,}" = "y" ]; then \
-        sudo nixos-rebuild switch --rollback && \
+        nh os rollback && \
         echo "✅ Rolled back successfully!"; \
     else \
         echo "❌ Cancelled."; \
@@ -141,7 +141,7 @@ rollback:
 # 📜 List all system generations
 generations:
     @echo "📜 System generations:"
-    @sudo nix-env --list-generations -p /nix/var/nix/profiles/system
+    @nh os info
 
 # 🗑️  Delete old generations (keep last N)
 gc keep="5":
@@ -174,13 +174,13 @@ edit:
 # 🔧 Diff current vs new configuration
 diff:
     @echo "🔧 Configuration diff:"
-    @sudo nixos-rebuild build --flake .#nixos
+    @nh os build .
     @nix store diff-closures /run/current-system ./result
 
 # 🎬 Build with detailed output (no nom needed)
 build-verbose:
     @echo "🔨 Building with verbose output..."
-    @sudo nixos-rebuild build --flake .#nixos --show-trace -v 2>&1 | tail -100
+    @nh os build . -- --show-trace -v
 # 🚀 Прогрев VFS Dota 2 через vmtouch
 warm-dota-cache files="game/dota/pak01_dir.vpk":
     @echo "🚀 Прогрев VFS Dota 2 через vmtouch..."
