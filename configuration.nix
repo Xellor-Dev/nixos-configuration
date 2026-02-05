@@ -104,6 +104,7 @@
   git
   gh
   nodejs
+  curl
   ];
 
   # Enable OpenGL
