@@ -7,8 +7,7 @@
                 ██║ ╚████║██║██╔╝ ██╗╚██████╔╝███████║
                 ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝
 ```
- 
->>>>>>> a94cb96 (Enhance README.md: restructure content for better readability, add detailed sections on features, prerequisites, and installation steps)
+
 # 🚀 NixOS Configuration
 
 ### *Declarative, Reproducible, Modular System Configuration*
