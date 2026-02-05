@@ -15,7 +15,6 @@
         ./modules/core/system.nix
         ./modules/core/users.nix
         ./modules/core/graphics.nix
-        ./modules/desktop/xorg.nix
         ./modules/desktop/plasma.nix
         ./modules/desktop/sddm.nix
         ./modules/services/networking.nix
