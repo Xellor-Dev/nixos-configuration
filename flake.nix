@@ -21,6 +21,7 @@
         ./modules/services/sound.nix
         ./modules/packages/dev.nix
         ./modules/packages/system.nix
+        ./modules/packages/gaming.nix
       ];
     };
   };
