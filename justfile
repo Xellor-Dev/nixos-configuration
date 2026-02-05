@@ -1,19 +1,14 @@
-# Justfile for NixOS Configuration Management
+# NixOS Configuration Management with Just
 
+set dotenv-load
+
+# Show help
 help:
-    echo "NixOS Configuration Management"
-    echo "=============================="
-    echo "just build       - Build configuration without switching"
-    echo "just switch      - Build and apply configuration"
-    echo "just update      - Update flake.lock"
-    echo "just test        - Test configuration (build only)"
-    echo "just clean       - Clean build artifacts"
-    echo "just lint        - Check Nix syntax"
-    echo "just fmt         - Format Nix files"
-    echo "just push        - Git commit and push"
-    echo "just status      - Show system status"
+    @echo "NixOS Configuration Management"
+    @echo "=============================="
+    @just --list
 
-# Build configuration without applying
+# Build configuration without switching
 build:
     sudo nixos-rebuild build --flake .#nixos
 
@@ -21,11 +16,11 @@ build:
 switch: test
     sudo nixos-rebuild switch --flake .#nixos
 
-# Just build (no sudo)
+# Test configuration (build only, no sudo)
 test:
     nixos-rebuild build --flake .#nixos 2>&1 | head -50
 
-# Update nixpkgs version
+# Update flake.lock
 update:
     nix flake update
     git add flake.lock
@@ -45,29 +40,46 @@ fmt:
     find . -name "*.nix" -type f ! -path "./.git/*" ! -path "./result*" \
         -exec nixpkgs-fmt {} +
 
-# Git operations
+# Git: add, commit, push
 push:
     git status
     git add .
     git commit -m "config: update nixos configuration" || true
     git push origin main
 
-# Show current system info
+# Show system info
 status:
-    echo "NixOS Version: $$(nixos-version)"
-    echo "Flake: $$(git rev-parse --short HEAD)"
-    echo "Generation: $$(sudo nix-env --list-generations -p /nix/var/nix/profiles/system | tail -1)"
+    @echo "NixOS Version: {{`nixos-version`}}"
+    @echo "Flake: {{`git rev-parse --short HEAD`}}"
+    @echo "Generation: {{`sudo nix-env --list-generations -p /nix/var/nix/profiles/system | tail -1`}}"
 
-# Quick rebuild (build + switch)
+# Quick rebuild: clean + build + switch
 rebuild: clean build switch
 
-# Dev workflow: test, lint, commit, rebuild
+# Dev workflow: test + lint + push + switch
 dev: test lint push switch
 
 # Rollback to previous generation
 rollback:
     sudo nixos-rebuild switch --rollback
 
-# List generations
+# List all generations
 generations:
     sudo nix-env --list-generations -p /nix/var/nix/profiles/system
+
+# Add new package to dev.nix
+add-package package:
+    @echo "Adding {{package}} to modules/packages/dev.nix"
+    # Manually add to dev.nix and run:
+    @just test
+
+# Show flake inputs
+inputs:
+    nix flake show
+
+# Interactive rebuild with confirmation
+rebuild-interactive:
+    @echo "Building configuration..."
+    @just test
+    @echo "Ready to switch? (y/n)"
+    @read -r REPLY; if [ "$$REPLY" = "y" ]; then just switch; fi
