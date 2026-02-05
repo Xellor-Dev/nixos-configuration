@@ -176,3 +176,21 @@ diff:
     @echo "🔧 Configuration diff:"
     @sudo nixos-rebuild build --flake .#nixos
     @nix store diff-closures /run/current-system ./result
+
+# 🎬 Build with detailed output (no nom needed)
+build-verbose:
+    @echo "🔨 Building with verbose output..."
+    @sudo nixos-rebuild build --flake .#nixos --show-trace -v 2>&1 | tail -100
+# 🚀 Прогрев VFS Dota 2 через vmtouch
+warm-dota-cache files="game/dota/pak01_dir.vpk":
+    @echo "🚀 Прогрев VFS Dota 2 через vmtouch..."
+    for f in {{files}}; do \
+        FILE="$HOME/.local/share/Steam/steamapps/common/dota 2 beta/$f"; \
+        if [ -f "$FILE" ]; then \
+            echo "🔥 Прогреваю: $FILE"; \
+            vmtouch -vt "$FILE"; \
+        else \
+            echo "⚠️  Файл не найден: $FILE"; \
+        fi; \
+    done
+    @echo "✅ Прогрев завершён!"

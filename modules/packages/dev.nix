@@ -15,6 +15,8 @@
       curl
       just
       nixpkgs-fmt
+      nix-output-monitor
+      vmtouch
     ];
 
   };
