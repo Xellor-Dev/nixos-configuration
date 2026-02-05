@@ -1,85 +1,178 @@
 # NixOS Configuration Management with Just
+# Docs: https://github.com/casey/just
 
-set dotenv-load
+set dotenv-load := true
+set shell := ["bash", "-uc"]
 
-# Show help
+# Default recipe (runs when you type 'just')
+default:
+    @just --choose
+
+# Show help with descriptions
 help:
-    @echo "NixOS Configuration Management"
-    @echo "=============================="
-    @just --list
+    @echo "╔════════════════════════════════════════╗"
+    @echo "║  NixOS Configuration Management        ║"
+    @echo "╚════════════════════════════════════════╝"
+    @echo ""
+    @just --list --unsorted
+    @echo ""
+    @echo "💡 Tip: Run 'just' to select command interactively"
 
-# Build configuration without switching
+# 🔨 Build configuration without switching (safe test)
 build:
-    sudo nixos-rebuild build --flake .#nixos
+    @echo "🔨 Building NixOS configuration..."
+    @sudo nixos-rebuild build --flake .#nixos
+    @echo "✅ Build successful! Use 'just switch' to apply."
 
-# Build and apply configuration
-switch: test
-    sudo nixos-rebuild switch --flake .#nixos
+# 🚀 Build and apply configuration (with confirmation)
+switch:
+    @echo "🔍 Testing configuration first..."
+    @just test
+    @echo ""
+    @echo "⚠️  Ready to switch system configuration?"
+    @echo "   Current: {{`nixos-version`}}"
+    @echo "   Flake:   {{`git rev-parse --short HEAD`}}"
+    @bash -c 'read -p "Continue? [y/N]: " REPLY; \
+    if [ "$REPLY" = "y" ] || [ "$REPLY" = "Y" ]; then \
+        echo "🚀 Switching to new configuration..."; \
+        sudo nixos-rebuild switch --flake .#nixos && echo "✅ System configuration updated!"; \
+    else \
+        echo "❌ Cancelled."; \
+        exit 1; \
+    fi'
 
-# Test configuration (build only, no sudo)
+# 🧪 Test configuration (build only, no sudo required)
 test:
-    nixos-rebuild build --flake .#nixos 2>&1 | head -50
+    @echo "🧪 Testing configuration (no system changes)..."
+    @nixos-rebuild build --flake .#nixos 2>&1 | head -50 && \
+    echo "✅ Configuration is valid!"
 
-# Update flake.lock
+# 📦 Update flake.lock and show changes
 update:
-    nix flake update
-    git add flake.lock
-    git commit -m "chore: update flake.lock"
+    @echo "📦 Updating flake inputs..."
+    @nix flake update
+    @echo ""
+    @echo "📊 Changes:"
+    @git diff flake.lock | grep -E '^\+|^\-' | head -20
+    @echo ""
+    @read -p "Commit changes? [y/N]: " REPLY; \
+    if [ "$${REPLY,,}" = "y" ]; then \
+        git add flake.lock; \
+        git commit -m "chore: update flake.lock"; \
+        echo "✅ Changes committed!"; \
+    fi
 
-# Clean build artifacts
+# 🧹 Clean build artifacts
 clean:
-    rm -f result result-*
-    git gc
+    @echo "🧹 Cleaning build artifacts..."
+    @rm -f result result-*
+    @git gc --quiet
+    @echo "✅ Cleanup complete!"
 
-# Check Nix syntax
-lint:
-    nix flake check
+# ✅ Check Nix syntax and flake structure
+check:
+    @echo "✅ Checking flake structure..."
+    @nix flake check
 
-# Format Nix files (requires nixpkgs-fmt)
+# 📝 Format all Nix files (requires nixpkgs-fmt)
 fmt:
-    find . -name "*.nix" -type f ! -path "./.git/*" ! -path "./result*" \
-        -exec nixpkgs-fmt {} +
+    @echo "📝 Formatting Nix files..."
+    @find . -name "*.nix" -type f ! -path "./.git/*" ! -path "./result*" \
+        -exec nixpkgs-fmt {} + && \
+    echo "✅ Formatting complete!"
 
-# Git: add, commit, push
+# 📤 Git: interactive commit and push
 push:
-    git status
-    git add .
-    git commit -m "config: update nixos configuration" || true
-    git push origin main
+    @echo "📊 Current status:"
+    @git status --short
+    @echo ""
+    @read -p "Commit message: " MSG; \
+    if [ -n "$$MSG" ]; then \
+        git add .; \
+        git commit -m "$$MSG" || true; \
+        read -p "Push to origin? [y/N]: " PUSH; \
+        if [ "$${PUSH,,}" = "y" ]; then \
+            git push origin main && echo "✅ Pushed!"; \
+        fi; \
+    else \
+        echo "❌ No commit message provided."; \
+    fi
 
-# Show system info
+# 📊 Show detailed system info
 status:
-    @echo "NixOS Version: {{`nixos-version`}}"
-    @echo "Flake: {{`git rev-parse --short HEAD`}}"
-    @echo "Generation: {{`sudo nix-env --list-generations -p /nix/var/nix/profiles/system | tail -1`}}"
+    @echo "╔════════════════════════════════════════╗"
+    @echo "║  System Status                         ║"
+    @echo "╚════════════════════════════════════════╝"
+    @echo ""
+    @echo "🖥️  NixOS:      {{`nixos-version`}}"
+    @echo "🔗 Flake:      {{`git rev-parse --short HEAD`}} ({{`git branch --show-current`}})"
+    @echo "📦 Generation: {{`sudo nix-env --list-generations -p /nix/var/nix/profiles/system | tail -1 | awk '{print $1}'`}}"
+    @echo "💾 Store:      {{`du -sh /nix/store 2>/dev/null | awk '{print $1}'`}}"
+    @echo ""
+    @echo "📝 Uncommitted changes:"
+    @git status --short || echo "  (none)"
 
-# Quick rebuild: clean + build + switch
-rebuild: clean build switch
+# 🔄 Quick rebuild: clean + build + switch
+rebuild: clean
+    @just build
+    @just switch
 
-# Dev workflow: test + lint + push + switch
-dev: test lint push switch
+# 🚀 Full dev workflow: test + check + commit + switch
+dev:
+    @echo "🚀 Starting development workflow..."
+    @just test
+    @just check
+    @just push
+    @just switch
 
-# Rollback to previous generation
+# ⏮️  Rollback to previous generation
 rollback:
-    sudo nixos-rebuild switch --rollback
+    @echo "⏮️  Rolling back to previous generation..."
+    @sudo nix-env --list-generations -p /nix/var/nix/profiles/system | tail -5
+    @echo ""
+    @read -p "Confirm rollback? [y/N]: " REPLY; \
+    if [ "$${REPLY,,}" = "y" ]; then \
+        sudo nixos-rebuild switch --rollback && \
+        echo "✅ Rolled back successfully!"; \
+    else \
+        echo "❌ Cancelled."; \
+    fi
 
-# List all generations
+# 📜 List all system generations
 generations:
-    sudo nix-env --list-generations -p /nix/var/nix/profiles/system
+    @echo "📜 System generations:"
+    @sudo nix-env --list-generations -p /nix/var/nix/profiles/system
 
-# Add new package to dev.nix
-add-package package:
-    @echo "Adding {{package}} to modules/packages/dev.nix"
-    # Manually add to dev.nix and run:
-    @just test
+# 🗑️  Delete old generations (keep last N)
+gc keep="5":
+    @echo "🗑️  Deleting old generations (keeping last {{keep}})..."
+    @sudo nix-env --delete-generations +{{keep}} -p /nix/var/nix/profiles/system
+    @sudo nix-collect-garbage
+    @echo "✅ Garbage collection complete!"
 
-# Show flake inputs
-inputs:
-    nix flake show
+# 🔍 Show flake inputs and outputs
+info:
+    @echo "🔍 Flake information:"
+    @nix flake show
+    @echo ""
+    @echo "📦 Inputs:"
+    @nix flake metadata
 
-# Interactive rebuild with confirmation
-rebuild-interactive:
-    @echo "Building configuration..."
-    @just test
-    @echo "Ready to switch? (y/n)"
-    @read -r REPLY; if [ "$$REPLY" = "y" ]; then just switch; fi
+# 🔎 Search for package in nixpkgs
+search query:
+    @echo "🔎 Searching for '{{query}}'..."
+    @nix search nixpkgs {{query}}
+
+# 📝 Edit module interactively
+edit:
+    @echo "📝 Select module to edit:"
+    @MODULE=$(find modules -name "*.nix" -type f | fzf --preview 'bat --color=always {}'); \
+    if [ -n "$$MODULE" ]; then \
+        ${EDITOR:-code} "$$MODULE"; \
+    fi
+
+# 🔧 Diff current vs new configuration
+diff:
+    @echo "🔧 Configuration diff:"
+    @sudo nixos-rebuild build --flake .#nixos
+    @nix store diff-closures /run/current-system ./result

@@ -14,6 +14,7 @@
   nodejs
   curl
   just
+  nixpkgs-fmt
   ];
 
   };
