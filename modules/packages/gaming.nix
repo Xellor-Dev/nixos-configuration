@@ -20,15 +20,15 @@
 
     settings = {
       general = {
-        renice = 10;               # Process priority boost
-        softrealtime = "auto";     # Soft realtime scheduling
-        inhibit_screensaver = 1;   # Prevent screensaver during gaming
+        renice = 10; # Process priority boost
+        softrealtime = "auto"; # Soft realtime scheduling
+        inhibit_screensaver = 1; # Prevent screensaver during gaming
       };
 
       gpu = {
         apply_gpu_optimisations = "accept-responsibility";
-        gpu_device = 0;            # NVIDIA RTX 3060 Ti
-        nv_powermizer_mode = 1;    # Prefer maximum performance
+        gpu_device = 0; # NVIDIA RTX 3060 Ti
+        nv_powermizer_mode = 1; # Prefer maximum performance
       };
 
       cpu = {
@@ -54,8 +54,8 @@
     gamescope
 
     # Performance monitoring
-    mangohud       # FPS overlay
-    libnotify      # Notifications for gamemode
+    mangohud # FPS overlay
+    libnotify # Notifications for gamemode
   ];
 
   # Enable 32-bit graphics drivers for gaming compatibility
