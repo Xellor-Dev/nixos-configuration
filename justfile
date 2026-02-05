@@ -21,7 +21,7 @@ help:
 # 🔨 Build configuration without switching (safe test)
 build:
     @echo "🔨 Building NixOS configuration..."
-    @sudo nixos-rebuild build --flake .#nixos
+    @sudo nixos-rebuild build --flake .#nixos |& nom
     @echo "✅ Build successful! Use 'just switch' to apply."
 
 # 🚀 Build and apply configuration (with confirmation)
@@ -35,7 +35,7 @@ switch:
     @bash -c 'read -p "Continue? [y/N]: " REPLY; \
     if [ "$REPLY" = "y" ] || [ "$REPLY" = "Y" ]; then \
         echo "🚀 Switching to new configuration..."; \
-        sudo nixos-rebuild switch --flake .#nixos && echo "✅ System configuration updated!"; \
+        sudo nixos-rebuild switch --flake .#nixos |& nom && echo "✅ System configuration updated!"; \
     else \
         echo "❌ Cancelled."; \
         exit 1; \
