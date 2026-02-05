@@ -8,3 +8,4 @@ result-*
 # Ignore GitHub metadata and workflows
 .github
 
+/modules/template.nix
