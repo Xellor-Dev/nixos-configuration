@@ -5,17 +5,17 @@
 
 
   config = {
-    
-    
-  users.users.xellor = {
-    isNormalUser = true;
-    description = "Daniel";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      kdePackages.kate
-    #  thunderbird
-    ];
-  };
-    
+
+
+    users.users.xellor = {
+      isNormalUser = true;
+      description = "Daniel";
+      extraGroups = [ "networkmanager" "wheel" ];
+      packages = with pkgs; [
+        kdePackages.kate
+        #  thunderbird
+      ];
+    };
+
   };
 }

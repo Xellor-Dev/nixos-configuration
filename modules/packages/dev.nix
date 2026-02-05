@@ -6,16 +6,16 @@
 
   config = {
 
-  environment.systemPackages = with pkgs; [
+    environment.systemPackages = with pkgs; [
 
-  vscode
-  git
-  gh
-  nodejs
-  curl
-  just
-  nixpkgs-fmt
-  ];
+      vscode
+      git
+      gh
+      nodejs
+      curl
+      just
+      nixpkgs-fmt
+    ];
 
   };
 }

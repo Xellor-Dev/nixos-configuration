@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 {
-  
+
   # This module configures networking settings for NixOS.
 
   config = {

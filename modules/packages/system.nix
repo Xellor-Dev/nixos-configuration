@@ -7,17 +7,17 @@
   config = {
 
 
-  # Install firefox.
-  programs.firefox.enable = true;
+    # Install firefox.
+    programs.firefox.enable = true;
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+    # Allow unfree packages
+    nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
- 
-  ];
+    # List packages installed in system profile. To search, run:
+    # $ nix search wget
+    environment.systemPackages = with pkgs; [
+
+    ];
 
   };
 }

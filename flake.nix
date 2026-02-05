@@ -8,7 +8,7 @@
   outputs = { self, nixpkgs }: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      modules = [ 
+      modules = [
         ./configuration.nix
         ./hardware-configuration.nix
         ./modules/core/boot.nix
@@ -21,7 +21,7 @@
         ./modules/services/sound.nix
         ./modules/packages/dev.nix
         ./modules/packages/system.nix
-       ];
+      ];
     };
   };
 }
