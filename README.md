@@ -1,5 +1,6 @@
 <div align="center">
-# 🚀 NixOS Configuration
+
+### 🚀 NixOS Configuration
 
 ### *Declarative, Reproducible, Modular System Configuration*
 
