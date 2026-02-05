@@ -103,7 +103,6 @@
 	vscode
   git
   gh
-  npx
   ];
 
   # Enable OpenGL
