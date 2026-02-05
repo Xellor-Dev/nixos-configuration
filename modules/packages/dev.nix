@@ -13,7 +13,7 @@
   gh
   nodejs
   curl
-  make
+  just
   ];
 
   };
