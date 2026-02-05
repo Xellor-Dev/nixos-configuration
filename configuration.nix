@@ -103,6 +103,8 @@
 	vscode
   git
   gh
+  nodejs
+  npm
   ];
 
   # Enable OpenGL
