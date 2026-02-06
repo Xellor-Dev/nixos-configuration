@@ -9,3 +9,4 @@ result-*
 .github
 
 /modules/template.nix
+/noctalia-shell

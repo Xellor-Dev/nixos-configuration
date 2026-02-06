@@ -9,7 +9,8 @@
 
     # Install firefox.
     programs.firefox.enable = true;
-
+    programs.hyprland.enable =true;
+    programs.hyprland.withUWSM  = true;
     programs.nh = {
       enable = true;
       flake = "/home/xellor/nixos-config";
@@ -29,6 +30,9 @@
     # $ nix search wget
     environment.systemPackages = with pkgs; [
       discord
+      libxcb-cursor
+      xorg.libXcursor
+      kitty
     ];
 
   };
