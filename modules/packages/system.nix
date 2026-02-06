@@ -18,22 +18,9 @@
       clean.extraArgs = "--keep-since 4d --keep 3";
     };
 
-
-    programs.starship = {
-      enable = true;
-      # Configuration written to ~/.config/starship.toml
-      settings = {
-        # add_newline = false;
-
-        # character = {
-        #   success_symbol = "[➜](bold green)";
-        #   error_symbol = "[➜](bold red)";
-        # };
-
-        # package.disabled = true;
-      };
-    };
-
+    hardware.bluetooth.enable = true;
+    services.power-profiles-daemon.enable = true;
+    services.upower.enable = true;
 
     # Allow unfree packages
     nixpkgs.config.allowUnfree = true;

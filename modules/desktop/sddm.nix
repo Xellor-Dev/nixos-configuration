@@ -5,6 +5,6 @@
 
 
   config = {
-    services.displayManager.sddm.enable = true;
+    # services.displayManager.sddm.enable = false;
   };
 }
