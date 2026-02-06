@@ -14,7 +14,7 @@
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       specialArgs = { inherit inputs; };
       modules = [
-        ./noctalia.nix
+        ./modules/desktop/noctalia.nix
         ./configuration.nix
         ./hardware-configuration.nix
         ./modules/core/boot.nix
