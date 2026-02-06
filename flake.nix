@@ -18,21 +18,20 @@
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       specialArgs = { inherit inputs; };
       modules = [
-        ./modules/desktop/noctalia.nix
         ./configuration.nix
-        ./hardware-configuration.nix
         home-manager.nixosModules.home-manager
         ({ pkgs, inputs, ... }: {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.xellor = (import ./home.nix) { inherit pkgs inputs; };
+          home-manager.users.xellor = import ./home.nix;
+          home-manager.extraSpecialArgs = { inherit inputs; };
         })
         ./modules/core/boot.nix
         ./modules/core/system.nix
         ./modules/core/users.nix
         ./modules/core/graphics.nix
-        # ./modules/desktop/plasma.nix
-        # ./modules/desktop/sddm.nix
+        ./modules/desktop/plasma.nix
+        ./modules/desktop/sddm.nix
         ./modules/services/networking.nix
         ./modules/services/sound.nix
         ./modules/packages/dev.nix

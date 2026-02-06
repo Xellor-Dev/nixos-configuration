@@ -3,64 +3,33 @@
 {
   # home manager programs
   home.packages = with pkgs; [
+    inputs.caelestia-shell.packages.x86_64-linux.default
+    git
   ];
 
   imports = [
-    inputs.noctalia.homeModules.default
+
   ];
 
   home.stateVersion = "23.11";
 
-  programs.noctalia-shell = {
+  programs.caelestia = {
     enable = true;
+    systemd = {
+      enable = false; # if you prefer starting from your compositor
+      target = "graphical-session.target";
+      environment = [ ];
+    };
     settings = {
-      key = "value";
-    };
-    colors = {
-      mError = "#dddddd";
-      mOnError = "#111111";
-      mOnPrimary = "#111111";
-      mOnSecondary = "#111111";
-      mOnSurface = "#828282";
-      mOnSurfaceVariant = "#5d5d5d";
-      mOnTertiary = "#111111";
-      mOutline = "#3c3c3c";
-      mPrimary = "#aaaaaa";
-      mSecondary = "#a7a7a7";
-      mShadow = "#000000";
-      mSurface = "#111111";
-      mSurfaceVariant = "#191919";
-      mTertiary = "#cccccc";
-    };
-    "user-templates" = {
-      templates = {
-        neovim = {
-          input_path = "~/.config/noctalia/templates/template.lua";
-          output_path = "~/.config/nvim/generated.lua";
-          post_hook = "pkill -SIGUSR1 nvim";
-        };
+      bar.status = {
+        showBattery = false;
       };
+      paths.wallpaperDir = "~/Images";
     };
-    plugins = {
-      sources = [
-        {
-          enabled = true;
-          name = "Noctalia Plugins";
-          url = "https://github.com/noctalia-dev/noctalia-plugins";
-        }
-      ];
-      states = {
-        catwalk = {
-          enabled = true;
-          sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
-        };
-      };
-      version = 1;
-    };
-    pluginSettings = {
-      wallpaper = {
-        blur = true;
-        path = "/path/to/your/wallpaper.png"; # Please change this
+    cli = {
+      enable = true; # Also add caelestia-cli to path
+      settings = {
+        theme.enableGtk = false;
       };
     };
   };
