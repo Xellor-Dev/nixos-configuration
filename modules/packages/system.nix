@@ -28,11 +28,15 @@
 
     # List packages installed in system profile. To search, run:
     # $ nix search wget
+    # Fish нужен на системном уровне, т.к. Hyprland exec не видит home-manager PATH
+    programs.fish.enable = true;
+
     environment.systemPackages = with pkgs; [
       discord
       libxcb-cursor
       xorg.libXcursor
       kitty
+      jq
     ];
 
   };

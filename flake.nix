@@ -3,22 +3,29 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
+    caelestia-shell = {
+      url = "github:caelestia-dots/shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    caelestia-dots = {
+      url = "github:caelestia-dots/caelestia";
+      flake = false;
+    };
   };
+
 
   outputs = inputs@{ self, nixpkgs, home-manager, ... }: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       specialArgs = { inherit inputs; };
       modules = [
-        ./configuration.nix
+        ./hardware-configuration.nix
         home-manager.nixosModules.home-manager
         ({ pkgs, inputs, ... }: {
           home-manager.useGlobalPkgs = true;
@@ -26,11 +33,12 @@
           home-manager.users.xellor = import ./home.nix;
           home-manager.extraSpecialArgs = { inherit inputs; };
         })
+        # Ваши остальные модули...
         ./modules/core/boot.nix
         ./modules/core/system.nix
         ./modules/core/users.nix
         ./modules/core/graphics.nix
-        ./modules/desktop/plasma.nix
+        # ./modules/desktop/plasma.nix  # Отключено — используем Hyprland
         ./modules/desktop/sddm.nix
         ./modules/services/networking.nix
         ./modules/services/sound.nix
