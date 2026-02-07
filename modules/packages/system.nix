@@ -36,7 +36,14 @@
       libxcb-cursor
       xorg.libXcursor
       kitty
-      jq
+      # foot — управляется caelestia-nixos через programs.foot (HM)
+      # vscodium — управляется caelestia-nixos через editor.vscode (HM)
+      thunar
+      nemo
+      # qps — пакет не существует в nixpkgs-unstable
+      pavucontrol
+      github-desktop
+      # jq — управляется caelestia-nixos как зависимость
     ];
 
   };

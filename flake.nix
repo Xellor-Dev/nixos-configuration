@@ -9,14 +9,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    caelestia-shell = {
-      url = "github:caelestia-dots/shell";
+    # Caelestia — единственный input, внутри себя тянет caelestia-shell.
+    # follows гарантирует, что все используют один nixpkgs.
+    caelestia-nix = {
+      url = "github:Xellor-Dev/caelestia-nixos";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    caelestia-dots = {
-      url = "github:caelestia-dots/caelestia";
-      flake = false;
+      inputs.caelestia-shell.inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -32,6 +30,7 @@
           home-manager.useUserPackages = true;
           home-manager.users.xellor = import ./home.nix;
           home-manager.extraSpecialArgs = { inherit inputs; };
+          # Caelestia HM-модуль активируется через imports в home.nix
         })
         # Ваши остальные модули...
         ./modules/core/boot.nix

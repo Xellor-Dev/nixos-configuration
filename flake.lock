@@ -3,9 +3,11 @@
     "caelestia-cli": {
       "inputs": {
         "caelestia-shell": [
+          "caelestia-nix",
           "caelestia-shell"
         ],
         "nixpkgs": [
+          "caelestia-nix",
           "caelestia-shell",
           "nixpkgs"
         ]
@@ -24,19 +26,24 @@
         "type": "github"
       }
     },
-    "caelestia-dots": {
-      "flake": false,
+    "caelestia-nix": {
+      "inputs": {
+        "caelestia-shell": "caelestia-shell",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "lastModified": 1770122637,
-        "narHash": "sha256-QskgyhdXXanKMxPDdEiQzze/zhgS0HciAmHs2gkywds=",
-        "owner": "caelestia-dots",
-        "repo": "caelestia",
-        "rev": "ea1a4a815ba0565d726feab4104ba4e448cf9ef4",
+        "lastModified": 1770435383,
+        "narHash": "sha256-y96OqRbhagMqGrtnGsOE30UU2GsM3/aAxi3D7/nTuk4=",
+        "owner": "Xellor-Dev",
+        "repo": "caelestia-nixos",
+        "rev": "68273248150182e42a6064f2293c9aebd795348d",
         "type": "github"
       },
       "original": {
-        "owner": "caelestia-dots",
-        "repo": "caelestia",
+        "owner": "Xellor-Dev",
+        "repo": "caelestia-nixos",
         "type": "github"
       }
     },
@@ -101,6 +108,7 @@
     "quickshell": {
       "inputs": {
         "nixpkgs": [
+          "caelestia-nix",
           "caelestia-shell",
           "nixpkgs"
         ]
@@ -121,8 +129,7 @@
     },
     "root": {
       "inputs": {
-        "caelestia-dots": "caelestia-dots",
-        "caelestia-shell": "caelestia-shell",
+        "caelestia-nix": "caelestia-nix",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs"
       }
