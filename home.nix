@@ -7,7 +7,7 @@
 #   2. Переопределения специфичные для ВАШЕЙ машины
 #   3. Пакеты и программы, НЕ управляемые caelestia
 #
-{ pkgs, inputs, ... }:
+{ config, pkgs, inputs, lib, ... }:
 
 {
   home.stateVersion = "23.11";
@@ -95,4 +95,24 @@
 
   # Starship управляется caelestia-nixos через term.starship — не дублируем.
   # programs.starship.enable = true;  ← убрано, caelestia включает с полным конфигом.
+
+  # Make VSCodium settings.json writable (HM normally symlinks it read-only).
+  home.activation.vscodiumWritableSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    for settings_dir in \
+      "$HOME/.config/VSCodium/User" \
+      "$HOME/.config/.vscode-oss/User" \
+      "$HOME/.config/Code/User"; do
+      settings_file="$settings_dir/settings.json"
+
+      if [ -L "$settings_file" ]; then
+        tmp=$(mktemp)
+        cp -L "$settings_file" "$tmp"
+        rm -f "$settings_file"
+        mkdir -p "$settings_dir"
+        cp "$tmp" "$settings_file"
+        chmod 644 "$settings_file"
+        rm -f "$tmp"
+      fi
+    done
+  '';
 }
