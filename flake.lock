@@ -34,11 +34,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1770435383,
-        "narHash": "sha256-y96OqRbhagMqGrtnGsOE30UU2GsM3/aAxi3D7/nTuk4=",
+        "lastModified": 1770510335,
+        "narHash": "sha256-kWroFeeiLQGiSnL2DN78vFbxCV6jP5D7YOW+Fs3c/z4=",
         "owner": "Xellor-Dev",
         "repo": "caelestia-nixos",
-        "rev": "68273248150182e42a6064f2293c9aebd795348d",
+        "rev": "ba6f92055049105e59b32e506960081bba1b1885",
         "type": "github"
       },
       "original": {
