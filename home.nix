@@ -1,32 +1,32 @@
 #
-# home.nix — Конфигурация Home Manager (Вариант B: модульная интеграция)
+# home.nix — Home Manager configuration (modular integration)
 #
-# Принцип: caelestia-nixos — единственный источник правды для Hyprland/shell/term/editor.
-# Этот файл содержит ТОЛЬКО:
-#   1. Подключение caelestia-nixos модуля
-#   2. Переопределения специфичные для ВАШЕЙ машины
-#   3. Пакеты и программы, НЕ управляемые caelestia
+# Architecture: caelestia-nixos is the single source of truth for Hyprland/shell/term/editor.
+# This file contains ONLY:
+#   1. caelestia-nixos module integration
+#   2. Machine-specific overrides
+#   3. Packages and programs NOT managed by caelestia
 #
 { config, pkgs, inputs, lib, ... }:
 
 {
   home.stateVersion = "23.11";
 
-  # ── 1. Модули ─────────────────────────────────────────────────────────
-  # caelestia-nixos подключает caelestia-shell внутри себя (caelestia.nix:L11),
-  # поэтому НЕ импортируем caelestia-shell напрямую — избегаем двойного импорта.
+  # ── 1. Modules ────────────────────────────────────────────────────────
+  # caelestia-nixos includes caelestia-shell internally (caelestia.nix:L11),
+  # so we do NOT import caelestia-shell directly to avoid duplicate imports.
   imports = [
     inputs.caelestia-nix.homeManagerModules.default
   ];
 
-  # ── 2. Caelestia Dots (декларативное управление) ──────────────────────
-  # Включает ВСЁ: hyprland, foot, fish, starship, btop, vscode, shell, cli.
-  # Каждый субмодуль можно отключить через .enable = false.
+  # ── 2. Caelestia Dots (declarative configuration) ─────────────────────
+  # Enables ALL components: hyprland, foot, fish, starship, btop, vscode, shell, cli.
+  # Each submodule can be disabled via .enable = false.
   programs.caelestia-dots = {
     enable = true;
 
-    # ── Hyprland (caelestia-nixos управляет wayland.windowManager.hyprland) ──
-    # НЕ нужен xdg.configFile."hypr" — конфиг генерируется декларативно.
+    # ── Hyprland (managed by caelestia-nixos via wayland.windowManager.hyprland) ──
+    # xdg.configFile."hypr" is NOT needed — config is generated declaratively.
     hypr.variables = {
       terminal = "foot";
       browser = "firefox";
@@ -36,13 +36,13 @@
       cursorSize = 24;
     };
 
-    # Кастомные keybinds для раскладки (вместо ручного hypr-user.conf)
+    # Custom keybinds for keyboard layout (replaces manual hypr-user.conf)
     hypr.hyprland.input.settings.input = {
-      kb_layout = "us,ru";
+      kb_layout = "us,ru,ua";
       kb_options = "grp:alt_shift_toggle";
     };
 
-    # ── Shell (AGS bar, launcher, notifications, etc.) ──────────────────
+    # ── Shell (AGS bar, launcher, notifications, etc.) ───────────────────
     caelestia.shell = {
       paths.wallpaperDir = "~/Pictures/Wallpapers";
       general.apps = {
@@ -51,41 +51,41 @@
       };
     };
 
-    # ── CLI (theme engine) ──────────────────────────────────────────────
+    # ── CLI (theme engine) ────────────────────────────────────────────────
     caelestia.cli.settings = {
       theme.enableGtk = false;
     };
 
-    # ── Foot (терминал) — управляется caelestia, не нужен xdg.configFile ──
-    # foot.settings — при необходимости переопределить шрифт, размер и т.д.
+    # ── Foot (terminal) — managed by caelestia, xdg.configFile not needed ─
+    # foot.settings can be used to override font, size, etc. if needed.
 
-    # ── Editor (vscode/vscodium) ────────────────────────────────────────
-    # editor.vscode управляется caelestia-nixos, не ставим vscodium системно.
+    # ── Editor (vscode/vscodium) ──────────────────────────────────────────
+    # editor.vscode is managed by caelestia-nixos, no need for system-wide vscodium.
   };
 
-  # ── 3. Пакеты (ТОЛЬКО те, которые НЕ управляются caelestia) ──────────
-  # caelestia-nixos уже ставит/включает: foot, fish, starship, btop, vscode,
+  # ── 3. Packages (ONLY those NOT managed by caelestia) ─────────────────
+  # caelestia-nixos already installs/enables: foot, fish, starship, btop, vscode,
   # gnome-keyring, polkit-gnome, gammastep, cliphist, hyprpicker, trash-cli.
   home.packages = with pkgs; [
     git
-    # Шрифты
+    # Fonts
     nerd-fonts.jetbrains-mono
     font-awesome
-    # Утилиты (не управляемые caelestia)
-    kitty        # Альтернативный терминал
+    # Utilities (not managed by caelestia)
+    kitty        # Alternative terminal
     rofi
     swww
     fzf
     fastfetch
   ];
 
-  # ── 4. Раскладка ─────────────────────────────────────────────────────
+  # ── 4. Keyboard Layout ────────────────────────────────────────────────
   home.keyboard = {
     layout = "us,ru";
     options = [ "grp:alt_shift_toggle" ];
   };
 
-  # ── 5. ZSH (ваш дополнительный шелл, не конфликтует с fish от caelestia) ─
+  # ── 5. ZSH (additional shell, does not conflict with caelestia's fish) ─
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -93,8 +93,8 @@
     syntaxHighlighting.enable = true;
   };
 
-  # Starship управляется caelestia-nixos через term.starship — не дублируем.
-  # programs.starship.enable = true;  ← убрано, caelestia включает с полным конфигом.
+  # Starship is managed by caelestia-nixos via term.starship — no duplication needed.
+  # programs.starship.enable = true;  ← removed, caelestia enables with full config.
 
   # Make VSCodium settings.json writable (HM normally symlinks it read-only).
   home.activation.vscodiumWritableSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''

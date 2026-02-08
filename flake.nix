@@ -9,8 +9,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Caelestia — единственный input, внутри себя тянет caelestia-shell.
-    # follows гарантирует, что все используют один nixpkgs.
+    # Caelestia — single input that includes caelestia-shell internally.
+    # 'follows' ensures all dependencies use the same nixpkgs version.
     caelestia-nix = {
       url = "github:Xellor-Dev/caelestia-nixos";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,16 +28,17 @@
         ({ pkgs, inputs, ... }: {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          home-manager.backupFileExtension = "backup";
           home-manager.users.xellor = import ./home.nix;
           home-manager.extraSpecialArgs = { inherit inputs; };
-          # Caelestia HM-модуль активируется через imports в home.nix
+          # Caelestia HM module is activated via imports in home.nix
         })
-        # Ваши остальные модули...
+        # System modules
         ./modules/core/boot.nix
         ./modules/core/system.nix
         ./modules/core/users.nix
         ./modules/core/graphics.nix
-        # ./modules/desktop/plasma.nix  # Отключено — используем Hyprland
+        # ./modules/desktop/plasma.nix  # Disabled — using Hyprland instead
         ./modules/desktop/sddm.nix
         ./modules/services/networking.nix
         ./modules/services/sound.nix
