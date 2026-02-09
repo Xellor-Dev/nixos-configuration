@@ -23,6 +23,9 @@
     services.power-profiles-daemon.enable = true;
     services.upower.enable = true;
 
+    virtualisation.libvirtd.enable = true;
+    programs.virt-manager.enable = true;
+
     # Allow unfree packages
     nixpkgs.config.allowUnfree = true;
 

@@ -72,7 +72,7 @@
     nerd-fonts.jetbrains-mono
     font-awesome
     # Utilities (not managed by caelestia)
-    kitty        # Alternative terminal
+    kitty # Alternative terminal
     rofi
     swww
     fzf
@@ -98,13 +98,13 @@
   # programs.starship.enable = true;  ← removed, caelestia enables with full config.
 
   # ── 6. Clean up conflicting files before Home Manager activation ─────────
-  home.activation.cleanupConflictingFiles = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
+  home.activation.cleanupConflictingFiles = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
     rm -f ~/.config/caelestia/shell.json.backup
     rm -f ~/.config/VSCodium/User/settings.json.backup
   '';
 
   # Make VSCodium settings.json writable (HM normally symlinks it read-only).
-  home.activation.vscodiumWritableSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  home.activation.vscodiumWritableSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     for settings_dir in \
       "$HOME/.config/VSCodium/User" \
       "$HOME/.config/.vscode-oss/User" \
