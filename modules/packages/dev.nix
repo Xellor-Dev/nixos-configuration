@@ -8,7 +8,6 @@
 
     environment.systemPackages = with pkgs; [
 
-      vscode
       git
       gh
       nodejs

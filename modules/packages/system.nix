@@ -38,7 +38,6 @@
       discord
       libxcb-cursor
       xorg.libXcursor
-      kitty
       # foot — управляется caelestia-nixos через programs.foot (HM)
       # vscodium — управляется caelestia-nixos через editor.vscode (HM)
       thunar
