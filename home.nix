@@ -40,7 +40,6 @@
   };
 
   home.packages = with pkgs; [
-    git
     nerd-fonts.jetbrains-mono
     font-awesome
     kitty
