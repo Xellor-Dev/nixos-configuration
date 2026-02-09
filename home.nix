@@ -80,12 +80,6 @@
     tinymist
   ];
 
-  # ── 4. Keyboard Layout ────────────────────────────────────────────────
-  home.keyboard = {
-    layout = "us,ru";
-    options = [ "grp:alt_shift_toggle" ];
-  };
-
   # ── 5. ZSH (additional shell, does not conflict with caelestia's fish) ─
   programs.zsh = {
     enable = true;
