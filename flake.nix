@@ -9,8 +9,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Caelestia — single input that includes caelestia-shell internally.
-    # 'follows' ensures all dependencies use the same nixpkgs version.
     caelestia-nix = {
       url = "github:Xellor-Dev/caelestia-nixos";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -38,7 +36,6 @@
         ./modules/core/system.nix
         ./modules/core/users.nix
         ./modules/core/graphics.nix
-        # ./modules/desktop/plasma.nix  # Disabled — using Hyprland instead
         ./modules/desktop/sddm.nix
         ./modules/services/networking.nix
         ./modules/services/sound.nix

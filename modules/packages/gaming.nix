@@ -8,12 +8,9 @@
     enable = true;
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
-
-    # Enable Gamescope session for Steam games
     gamescopeSession.enable = true;
   };
 
-  # Enable GameMode for performance optimization
   programs.gamemode = {
     enable = true;
     enableRenice = true; # Allow renice for better priority
@@ -38,32 +35,23 @@
       };
 
       custom = {
-        # Switch to performance governor when gaming
         start = "${pkgs.libnotify}/bin/notify-send 'GameMode' 'Performance mode enabled' && echo performance | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor";
         end = "${pkgs.libnotify}/bin/notify-send 'GameMode' 'Returning to powersave' && echo powersave | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor";
       };
     };
   };
 
-  # Gaming packages
   environment.systemPackages = with pkgs; [
-    # Proton/Wine dependencies
     protonup-qt
-
-    # Gamescope for proper resolution handling
     gamescope
-
-    # Performance monitoring
-    mangohud # FPS overlay
-    libnotify # Notifications for gamemode
+    mangohud
+    libnotify
   ];
 
-  # Enable 32-bit graphics drivers for gaming compatibility
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
   };
 
-  # CPU frequency scaling for gaming
-  powerManagement.cpuFreqGovernor = "schedutil"; # Auto-scale, switches to performance when needed
+  powerManagement.cpuFreqGovernor = "schedutil";
 }

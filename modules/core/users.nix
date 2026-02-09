@@ -11,9 +11,6 @@
       isNormalUser = true;
       description = "Daniel";
       extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
-      packages = with pkgs; [
-        #  thunderbird
-      ];
     };
 
     security.pam.loginLimits = [
