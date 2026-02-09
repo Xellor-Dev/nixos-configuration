@@ -77,6 +77,7 @@
     swww
     fzf
     fastfetch
+    tinymist
   ];
 
   # ── 4. Keyboard Layout ────────────────────────────────────────────────
@@ -95,6 +96,12 @@
 
   # Starship is managed by caelestia-nixos via term.starship — no duplication needed.
   # programs.starship.enable = true;  ← removed, caelestia enables with full config.
+
+  # ── 6. Clean up conflicting files before Home Manager activation ─────────
+  home.activation.cleanupConflictingFiles = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
+    rm -f ~/.config/caelestia/shell.json.backup
+    rm -f ~/.config/VSCodium/User/settings.json.backup
+  '';
 
   # Make VSCodium settings.json writable (HM normally symlinks it read-only).
   home.activation.vscodiumWritableSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
