@@ -28,12 +28,17 @@
 
     programs.fish.enable = true;
 
+    environment.sessionVariables = {
+      NIXOS_OZONE_WL = "1"; # This works for Equibop and other Electron apps
+    };
+
     environment.systemPackages = with pkgs; [
       libxcb-cursor
       xorg.libXcursor
       thunar
       nemo
       pavucontrol
+      equibop
     ];
 
   };

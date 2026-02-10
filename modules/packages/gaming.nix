@@ -9,6 +9,42 @@
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
     gamescopeSession.enable = true;
+
+    # Extra packages for game compatibility and Gamescope
+    package = pkgs.steam.override {
+      extraPkgs = pkgs': with pkgs'; [
+        # Xorg libraries for Gamescope
+        xorg.libXcursor
+        xorg.libXi
+        xorg.libXinerama
+        xorg.libXScrnSaver
+
+        # Common game dependencies
+        libpng
+        libpulseaudio
+        libvorbis
+        stdenv.cc.cc.lib # libstdc++.so.6
+        libkrb5
+        keyutils
+
+        # Additional compatibility libraries
+        gperftools # For some games' performance
+      ];
+    };
+
+    # Wayland environment variables for better compatibility
+    extraCompatPackages = with pkgs; [
+      proton-ge-bin
+    ];
+  };
+
+  # Environment variables for Steam on Wayland/Hyprland
+  environment.sessionVariables = {
+    # Force Steam to use Wayland when possible
+    STEAM_FORCE_DESKTOPUI_SCALING = "1.5";
+
+    # Fix for some games on Wayland
+    SDL_VIDEODRIVER = "x11"; # Fallback to X11 for game compatibility
   };
 
   programs.gamemode = {
@@ -42,10 +78,29 @@
   };
 
   environment.systemPackages = with pkgs; [
+    # Proton and compatibility tools
     protonup-qt
+
+    # Gaming utilities
     gamescope
-    mangohud
+    mangohud # FPS overlay and monitoring
+    goverlay # GUI for MangoHud configuration
     libnotify
+
+    # Additional gaming tools
+    steam-run # Run non-Steam games
+    gamemode # Already enabled via programs.gamemode
+
+    # Performance monitoring
+    htop
+    nvtopPackages.full # GPU monitoring for NVIDIA
+  ];
+
+  # Fonts for Steam UI and games
+  fonts.packages = with pkgs; [
+    liberation_ttf # Fallback fonts
+    source-sans-pro # Steam UI font
+    source-serif-pro
   ];
 
   hardware.graphics = {

@@ -7,6 +7,6 @@
 
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
-
+    boot.kernelParams = [ "nvidia-drm.fbdev=1" ];
   };
 }
