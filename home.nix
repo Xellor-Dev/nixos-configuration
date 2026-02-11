@@ -83,6 +83,56 @@ in
     syntaxHighlighting.enable = true;
   };
 
+  programs.vscode.profiles.default.userSettings = {
+    "[c]" = {
+      "editor.defaultFormatter" = "llvm-vs-code-extensions.vscode-clangd";
+    };
+    "[cpp]" = {
+      "editor.defaultFormatter" = "llvm-vs-code-extensions.vscode-clangd";
+    };
+    "[python]" = {
+      "editor.defaultFormatter" = "charliermarsh.ruff";
+    };
+    "codeium.enableCodeLens" = false;
+    "codeium.enableConfig" = {
+      "*" = true;
+      "fish" = true;
+      "qml" = true;
+    };
+    "diffEditor.hideUnchangedRegions.enabled" = true;
+    "doxdocgen.generic.boolReturnsTrueFalse" = false;
+    "editor.codeActionsOnSave" = {
+      "source.organizeImports" = "explicit";
+    };
+    "editor.cursorSmoothCaretAnimation" = "on";
+    "editor.defaultFormatter" = "esbenp.prettier-vscode";
+    "editor.fontLigatures" = true;
+    "editor.formatOnSave" = true;
+    "editor.inlayHints.enabled" = "off";
+    "editor.minimap.autohide" = "mouseover";
+    "editor.multiCursorModifier" = "ctrlCmd";
+    "editor.renderWhitespace" = "trailing";
+    "editor.smoothScrolling" = true;
+    "editor.suggestSelection" = "recentlyUsedByPrefix";
+    "git.enableSmartCommit" = true;
+    "javascript.preferences.importModuleSpecifierEnding" = "minimal";
+    "prettier.arrowParens" = "avoid";
+    "prettier.printWidth" = 120;
+    "prettier.tabWidth" = 4;
+    "python.languageServer" = "Pylance";
+    "qt-qml.doNotAskForQmllsDownload" = true;
+    "ruff.lineLength" = 120;
+    "security.workspace.trust.startupPrompt" = "always";
+    "terminal.integrated.enableMultiLinePasteWarning" = "never";
+    "terminal.integrated.smoothScrolling" = true;
+    "typescript.preferences.importModuleSpecifierEnding" = "minimal";
+    "typescript.preferences.preferTypeOnlyAutoImports" = true;
+    "workbench.colorTheme" = "Caelestia";
+    "workbench.iconTheme" = "catppuccin-mocha";
+    "workbench.list.smoothScrolling" = true;
+    "chat.disableAIFeatures" = false;
+  };
+
   home.activation.cleanupConflictingFiles = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
     rm -f ~/.config/caelestia/shell.json.backup
   '';

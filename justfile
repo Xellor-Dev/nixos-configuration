@@ -49,6 +49,23 @@ update:
         echo "✅ Changes committed!"; \
     fi
 
+# 📦 Update only nixpkgs (safe, doesn't break caelestia-nix compatibility)
+update-nixpkgs:
+    @echo "📦 Updating only nixpkgs (keeping caelestia-nix stable)..."
+    @nix flake lock --update-input nixpkgs
+    @echo ""
+    @echo "📊 Changes in nixpkgs:"
+    @git diff flake.lock | grep -A 5 -B 5 'nixpkgs' | head -20
+    @echo ""
+    @just test
+    @echo ""
+    @read -p "Commit changes? [y/N]: " REPLY; \
+    if [ "$${REPLY,,}" = "y" ]; then \
+        git add flake.lock; \
+        git commit -m "chore: update nixpkgs"; \
+        echo "✅ Changes committed!"; \
+    fi
+
 # 🧹 Clean build artifacts
 clean:
     @echo "🧹 Cleaning build artifacts..."
