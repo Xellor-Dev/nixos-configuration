@@ -2,6 +2,7 @@
 
 let
   # Discord wrapper with Wayland and GPU optimization flags
+  # Note: Consider using Vesktop instead for better Linux support and auto-updates
   discord-wayland = pkgs.symlinkJoin {
     name = "discord";
     paths = [ pkgs.discord ];
@@ -136,4 +137,10 @@ in
   home.activation.cleanupConflictingFiles = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
     rm -f ~/.config/caelestia/shell.json.backup
   '';
+
+  # Skip Discord's "must be your lucky day" update nag
+  # Ref: https://wiki.nixos.org/wiki/Discord#"Must_be_your_lucky_day"_popup
+  home.file.".config/discord/settings.json".text = builtins.toJSON {
+    SKIP_HOST_UPDATE = true;
+  };
 }
