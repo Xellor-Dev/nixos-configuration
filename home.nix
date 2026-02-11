@@ -1,25 +1,5 @@
 { config, pkgs, inputs, lib, ... }:
 
-let
-  # Discord wrapper with Wayland and GPU optimization flags
-  # Note: Consider using Vesktop instead for better Linux support and auto-updates
-  discord-wayland = pkgs.symlinkJoin {
-    name = "discord";
-    paths = [ pkgs.discord ];
-    buildInputs = [ pkgs.makeWrapper ];
-    postBuild = ''
-      wrapProgram $out/bin/discord \
-        --add-flags "--enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer" \
-        --add-flags "--ozone-platform=wayland" \
-        --add-flags "--enable-gpu-rasterization" \
-        --add-flags "--enable-zero-copy" \
-        --add-flags "--ignore-gpu-blocklist" \
-        --add-flags "--enable-hardware-overlays" \
-        --add-flags "--enable-smooth-scrolling"
-    '';
-  };
-in
-
 {
   home.stateVersion = "23.11";
 
@@ -73,8 +53,7 @@ in
     fzf
     fastfetch
     tinymist
-    discord-wayland
-    webcord
+    vesktop
   ];
 
   programs.zsh = {
@@ -84,7 +63,7 @@ in
     syntaxHighlighting.enable = true;
   };
 
-  # arRPC: Open Discord RPC server for Rich Presence in Discord Web and custom clients
+  # arRPC: Discord RPC server for Rich Presence in Vesktop and other custom Discord clients
   # https://github.com/OpenAsar/arrpc
   services.arrpc = {
     enable = true;
@@ -145,10 +124,4 @@ in
   home.activation.cleanupConflictingFiles = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
     rm -f ~/.config/caelestia/shell.json.backup
   '';
-
-  # Skip Discord's "must be your lucky day" update nag
-  # Ref: https://wiki.nixos.org/wiki/Discord#"Must_be_your_lucky_day"_popup
-  home.file.".config/discord/settings.json".text = builtins.toJSON {
-    SKIP_HOST_UPDATE = true;
-  };
 }
