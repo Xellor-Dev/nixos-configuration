@@ -24,7 +24,11 @@
     };
 
     environment.sessionVariables = {
-      NIXOS_OZONE_WL = "1"; # Для Electron/Chromium приложений
+      # Electron/Chromium Wayland support
+      NIXOS_OZONE_WL = "1"; # Включает Wayland для Electron/Chromium (работает с NixOS 25.05+)
+      ELECTRON_OZONE_PLATFORM_HINT = "auto"; # Electron 28-37 fallback для auto-detection Wayland
+      
+      # NVIDIA Wayland fixes
       WLR_NO_HARDWARE_CURSORS = "1"; # Фикс курсора на NVIDIA
       __GLX_VENDOR_LIBRARY_NAME = "nvidia";
       GBM_BACKEND = "nvidia-drm";

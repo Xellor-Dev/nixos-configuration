@@ -28,12 +28,6 @@
 
     programs.fish.enable = true;
 
-    environment.sessionVariables = {
-      NIXOS_OZONE_WL = "1"; # This works for Equibop and other Electron apps
-      # Allow Discord to self-update
-      # Discord checks for updates on startup; updates are stored in ~/.config/discord/
-    };
-
     environment.systemPackages = with pkgs; [
       libxcb-cursor
       xorg.libXcursor
