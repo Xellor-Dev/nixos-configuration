@@ -84,6 +84,14 @@ in
     syntaxHighlighting.enable = true;
   };
 
+  # arRPC: Open Discord RPC server for Rich Presence in Discord Web and custom clients
+  # https://github.com/OpenAsar/arrpc
+  services.arrpc = {
+    enable = true;
+    package = pkgs.arrpc;
+    systemdTarget = "graphical-session.target";
+  };
+
   programs.vscode.profiles.default.userSettings = {
     "[c]" = {
       "editor.defaultFormatter" = "llvm-vs-code-extensions.vscode-clangd";
