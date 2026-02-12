@@ -45,6 +45,17 @@
 
     # Fix for some games on Wayland
     SDL_VIDEODRIVER = "x11"; # Fallback to X11 for game compatibility
+    
+    # NVIDIA GPU оптимизация для игр
+    # Использовать максимальную производительность GPU
+    __GL_THREADED_OPTIMIZATION = "1"; # Оптимизация многопоточности
+    __GL_MaxFrameLatency = "1"; # Минимальная задержка кадра
+    __FORCE_INTEGRATED_GPU = "0"; # Использовать NVIDIA GPU, а не интегрированную
+    NVIDIA_VISIBLE_DEVICES = "all"; # Использовать все NVIDIA GPU
+    NVIDIA_DRIVER_CAPABILITIES = "compute,utility,graphics"; # Все возможности драйвера
+    
+    # Vulkan оптимизация
+    VK_ICD_FILENAMES = "/run/opengl-driver/etc/vulkan/icd.d/nvidia_icd.json:/run/opengl-driver-32/etc/vulkan/icd.d/nvidia_icd.json";
   };
 
   programs.gamemode = {
@@ -106,6 +117,26 @@
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
+    extraPackages = with pkgs; [
+      # Vulkan для игр
+      vulkan-loader
+      vulkan-tools
+      vulkan-validation-layers
+      
+      # OpenGL для старых игр
+      libglvnd
+      
+      # 32-bit версии для Steam games
+      pkgsi686Linux.vulkan-loader
+      pkgsi686Linux.libglvnd
+      
+      # NVIDIA оптимизация
+      nvidia-container-toolkit
+    ];
+    extraPackages32 = with pkgs.pkgsi686Linux; [
+      vulkan-loader
+      libglvnd
+    ];
   };
 
   powerManagement.cpuFreqGovernor = "schedutil";

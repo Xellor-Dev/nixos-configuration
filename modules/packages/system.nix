@@ -23,6 +23,8 @@
     virtualisation.libvirtd.enable = true;
     programs.virt-manager.enable = true;
 
+    services.flatpak.enable = true;
+
     # Allow unfree packages
     nixpkgs.config.allowUnfree = true;
 
@@ -32,9 +34,17 @@
       libxcb-cursor
       xorg.libXcursor
       thunar
+      tumbler           # Thumbnail service для Thunar
+      ffmpegthumbnailer # Для превью видео
       nemo
       pavucontrol
       equibop
+      telegram-desktop
+      video2x
+      mpv
+      feh
+      flatpak
+      protonup-qt
     ];
 
   };
